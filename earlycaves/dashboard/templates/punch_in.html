@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4">Punch In Onboarding</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- 1. Creator Name -->
+        <div class="mb-3">
+            <label for="creatorName" class="form-label">Creator Name</label>
+            <input type="text" class="form-control" id="creatorName" name="creator_name">
+        </div>
+
+        <!-- 2. Category -->
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" name="category">
+                <option selected disabled>Select category</option>
+                <!-- Add your categories -->
+            </select>
+        </div>
+
+        <!-- 3. Select Team -->
+        <div class="mb-3">
+            <label for="team" class="form-label">Select Team</label>
+            <select class="form-select" id="team" name="team">
+                <option selected disabled>Select team</option>
+                <!-- Add your team options -->
+            </select>
+        </div>
+
+        <!-- 4. Onboarding Creator -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="isOnboarding" name="is_onboarding">
+            <label class="form-check-label" for="isOnboarding">Is existing onboarding creator?</label>
+        </div>
+
+        <div id="onboardingSubFields" style="display:none;">
+            <!-- Add your 2 sub fields here -->
+            <div class="mb-3">
+                <label for="subField1" class="form-label">Sub Field 1</label>
+                <input type="text" class="form-control" id="subField1" name="sub_field_1">
+            </div>
+            <div class="mb-3">
+                <label for="subField2" class="form-label">Sub Field 2</label>
+                <input type="text" class="form-control" id="subField2" name="sub_field_2">
+            </div>
+        </div>
+
+        <!-- 5. Commission Charge -->
+        <div class="mb-3">
+            <label for="commission" class="form-label">Commission Charge (%)</label>
+            <input type="number" class="form-control" id="commission" name="commission">
+        </div>
+
+        <!-- 6. NPM Commission -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="isNpm" name="is_npm">
+            <label class="form-check-label" for="isNpm">NPM Commission?</label>
+        </div>
+
+        <div id="npmSubField" style="display:none;">
+            <div class="mb-3">
+                <label for="npmValue" class="form-label">NPM Commission Value</label>
+                <input type="text" class="form-control" id="npmValue" name="npm_value">
+            </div>
+        </div>
+
+        <!-- 7. IST Lead -->
+        <div class="mb-3 row align-items-center">
+            <label for="ist_lead" class="col-sm-2 col-form-label">Is IST Lead?</label>
+            <div class="col-sm-10 d-flex align-items-center">
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="radio" name="ist_lead" id="ist_lead_yes" value="yes">
+                    <label class="form-check-label" for="ist_lead_yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="ist_lead" id="ist_lead_no" value="no">
+                    <label class="form-check-label" for="ist_lead_no">No</label>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+
+        <!-- 8. Min Ticket -->
+        <div class="mb-3">
+            <label for="minTicket" class="form-label">Minimum Ticket</label>
+            <input type="number" class="form-control" id="minTicket" name="min_ticket">
+        </div>
+
+        <!-- 9. Max Ticket -->
+        <div class="mb-3">
+            <label for="maxTicket" class="form-label">Maximum Ticket</label>
+            <input type="number" class="form-control" id="maxTicket" name="max_ticket">
+        </div>
+
+        <!-- 10. Feature Type -->
+        <div class="mb-3">
+            <label for="featureType" class="form-label">Feature Type</label>
+            <select class="form-select" id="featureType" name="feature_type">
+                <option selected disabled>Select feature type</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Social Links</label>
+            <div id="socialLinksContainer">
+                <div class="row g-2 align-items-center mb-2">
+                    <div class="col-md-4">
+                        <select class="form-select" name="social_name[]">
+                            <option selected disabled>Select Social Name</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Twitter">Twitter</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="social_link[]" placeholder="Enter Social Link">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-success add-more-btn w-100">Add More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+        <!-- 14. Acquisition Funnel -->
+        <div class="mb-3">
+            <label for="acqFunnel" class="form-label">Acquisition Funnel</label>
+            <select class="form-select" id="featureType" name="feature_type">
+                <option selected disabled>Select Acquisition Funnel type</option>
+            </select>
+        </div>
+
+        <!-- 15. Acquisition Vertical -->
+        <div class="mb-3">
+            <label for="acqVertical" class="form-label">Acquisition Vertical</label>
+            <select class="form-select" id="featureType" name="feature_type">
+                <option selected disabled>Select Acquisition Vertical type</option>
+            </select>        
+        </div>
+
+        <!-- 16. Onboarding Reason -->
+        <div class="mb-3">
+            <label for="onboardingReason" class="form-label">Onboarding Reason</label>
+            <select class="form-select" id="featureType" name="feature_type">
+                <option selected disabled>Select Onboarding Reason type</option>
+            </select>        
+        </div>
+
+        <!-- 17. Course Integration ID -->
+        <div class="mb-3">
+            <label for="courseId" class="form-label">Course Integration ID</label>
+            <input type="text" class="form-control" id="courseId" name="course_integration_id">
+        </div>
+
+        <!-- 18. WhatsApp Group -->
+        <div class="mb-3">
+            <label for="whatsapp" class="form-label">WhatsApp Group</label>
+            <input type="text" class="form-control" id="whatsapp" name="whatsapp_group">
+        </div>
+
+        <!-- 19 & 20. Document Name and Upload -->
+        <div class="mb-3 row">
+            <div class="col-md-6">
+                <label class="form-label">Document Name</label>
+                <input type="text" class="form-control" name="document_name">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Document Upload</label>
+                <input type="file" class="form-control" name="document_file">
+            </div>
+        </div>
+
+        <!-- 21. Notes -->
+        <div class="mb-3">
+            <label for="notes" class="form-label">Notes</label>
+            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5">Save</button>
+        </div>
+    </form>
+</div>
+
+<!-- Optional JavaScript for toggling fields -->
+<script>
+    document.getElementById("isOnboarding").addEventListener("change", function () {
+        document.getElementById("onboardingSubFields").style.display = this.checked ? "block" : "none";
+    });
+
+    document.getElementById("isNpm").addEventListener("change", function () {
+        document.getElementById("npmSubField").style.display = this.checked ? "block" : "none";
+    });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const container = document.getElementById("socialLinksContainer");
+    
+            container.addEventListener("click", function (e) {
+                if (e.target && e.target.classList.contains("add-more-btn")) {
+                    const newGroup = document.createElement("div");
+                    newGroup.className = "row g-2 align-items-center mb-2";
+    
+                    newGroup.innerHTML = `
+                        <div class="col-md-4">
+                            <select class="form-select" name="social_name[]">
+                                <option selected disabled>Select Social Name</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Twitter">Twitter</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="social_link[]" placeholder="Enter Social Link">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success add-more-btn w-100">Add More</button>
+                        </div>
+                    `;
+                    container.appendChild(newGroup);
+                }
+            });
+        });
+    
+    
+
+</script>
+{% endblock %}

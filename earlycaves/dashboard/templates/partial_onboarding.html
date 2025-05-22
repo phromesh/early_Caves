@@ -1,0 +1,32 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Creator Name</th>
+            <th>Category</th>
+            <th>Team</th>
+            <th>Commission Charge</th>
+            <th>Feature Type</th>
+            <th>Social Name</th>
+            <th>Social Link</th>
+            <th>Onboarding Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for onboarding in onboardings %}
+        <tr>
+            <td>{{ onboarding.user.first_name }} {{ onboarding.user.last_name }}</td>
+            <td>{{ onboarding.category }}</td>
+            <td>{{ onboarding.team }}</td>
+            <td>{{ onboarding.commission_charge }}</td>
+            <td>{{ onboarding.feature_type }}</td>
+            <td>{{ onboarding.social_name }}</td>
+            <td><a href="{{ onboarding.social_link }}" target="_blank">{{ onboarding.social_link }}</a></td>
+            <td>{{ onboarding.onboarding_reason }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" class="text-center">No records found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

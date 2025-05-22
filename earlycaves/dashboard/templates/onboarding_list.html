@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Onboarding List{% endblock %}
+{% load dashboard_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Onboardings</h2>
+
+    <!-- Date Range Filter Dropdown -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <span class="me-2 fw-bold">🗓️ Filter:</span>
+            <div class="dropdown">
+                <button class="btn btn-outline-success rounded-pill dropdown-toggle" type="button" id="dateFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.GET.date_range %}
+                        {{ request.GET.date_range|title }}
+                    {% else %}
+                        Lifetime
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dateFilterDropdown">
+                    <li><a class="dropdown-item" href="?date_range=lifetime">Lifetime</a></li>
+                    <li><a class="dropdown-item" href="?date_range=today">Today</a></li>
+                    <li><a class="dropdown-item" href="?date_range=yesterday">Yesterday</a></li>
+                    <li><a class="dropdown-item" href="?date_range=this_week">This Week</a></li>
+                    <li><a class="dropdown-item" href="?date_range=last_week">Last Week</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Status Filter Buttons -->
+    <div class="mb-3">
+        <label class="me-2 fw-bold">Status:</label>
+        <div class="btn-group" role="group">
+            <a href="?status=self" class="btn btn-outline-primary {% if request.GET.status == 'self' %}active{% endif %}">Self</a>
+            <a href="?status=approved" class="btn btn-outline-primary {% if request.GET.status == 'approved' %}active{% endif %}">Approved by You</a>
+            <a href="?status=rejected" class="btn btn-outline-primary {% if request.GET.status == 'rejected' %}active{% endif %}">Rejected by You</a>
+            <a href="?status=pending" class="btn btn-outline-primary {% if request.GET.status == 'pending' %}active{% endif %}">Pending from You</a>
+            <a href="?status=team" class="btn btn-outline-primary {% if request.GET.status == 'team' %}active{% endif %}">Team</a>
+        </div>
+    </div>
+    
+
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search by name or creator id" value="{{ search_query }}">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Table to display onboardings with scrollable body -->
+    <div class="table-container" style="max-height: 500px; overflow-y: auto;">
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Creator Name</th>
+                    <th>Category</th>
+                    <th>Team</th>
+                    <th>Commission Charge</th>
+                    <th>Phone Number</th>
+                   
+                    <th>Feature Type</th>
+                    <th>Social Name</th>
+                    <th>Social Link</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ client.first_name }} {{client.last_name}}</td>
+                    <td>{{ client|group_name }}</td>
+                    <td>{{ onboarding.team }}</td>
+                    <td>{{ onboarding.commission_charge }}</td>
+                    <td>{% if client.phone_number %}{{ client.phone_number }}{% else %}N/A{% endif %}</td>
+                
+                    <td>{{ onboarding.feature_type }}</td>
+                    <td>{{ onboarding.social_name }}</td>
+                    <td><a href="{{ onboarding.social_link }}" target="_blank">{{ onboarding.social_link }}</a></td>
+                    <td>{% if client.is_aactive %}Approved{% else %}Pending{% endif %}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info view-client-btn" data-client-id="{{ client.id }}">
+                            👁️ View
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="13" class="text-center">No Onboardings available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- View Client Modal -->
+    <div class="modal fade" id="clientDetailModal" tabindex="-1" aria-labelledby="clientDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="clientDetailModalLabel">Client Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="clientDetailContent">
+            Loading...
+            </div>
+        </div>
+        </div>
+    </div>
+  
+
+    <div class="d-flex justify-content-center mt-3">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                {% endif %}
+    
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+    
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    
+</div>
+
+<!-- Custom CSS for Scrollable Table -->
+<style>
+    /* Table Container */
+    .table-container {
+        position: relative;
+        max-height: 500px; /* Adjust as needed */
+        overflow-y: auto; /* Enable vertical scroll */
+    }
+
+    /* Sticky Table Header */
+    .table th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #f8f9fa; /* Adjust background for header */
+    }
+
+    /* Styling for the table */
+    .table th, .table td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    /* Adding spacing and border for the table rows */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table th, .table td {
+        border: 1px solid #dee2e6;
+    }
+
+    /* Optional: Adding hover effect on rows */
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+</style>
+<script>
+    $(document).ready(function() {
+        $('.view-client-btn').click(function() {
+            var clientId = $(this).data('client-id');
+            
+            $.ajax({
+                url: "",
+                data: {
+                    'client_id': clientId
+                },
+                success: function(data) {
+                    $('#clientDetailContent').html(data.html);
+                    $('#clientDetailModal').modal('show');
+                },
+                error: function() {
+                    $('#clientDetailContent').html("<p class='text-danger'>Error loading client details.</p>");
+                    $('#clientDetailModal').modal('show');
+                }
+            });
+        });
+    });
+    </script>
+    
+{% endblock %}
