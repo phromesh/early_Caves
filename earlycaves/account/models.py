@@ -5,6 +5,7 @@ from django.core.validators import RegexValidator
 import uuid
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from multiselectfield import MultiSelectField
 
 
 def user_image(instance,filename):
@@ -80,7 +81,7 @@ class User(AbstractUser):
      
     ) 
     role= models.CharField(max_length=30,choices=ROLE)
-    clientgoal=models.ForeignKey(ClientGoal,on_delete=models.CASCADE)
+    clientgoal=models.ForeignKey(ClientGoal,on_delete=models.CASCADE, blank=True, null=True)
     phone_number = models.CharField(
         max_length=15,  # Adjust length as needed
         validators=[RegexValidator(r'^\+?1?\d{9,15}$')],  # Allows optional "+" and 9-15 digits
@@ -91,7 +92,7 @@ class User(AbstractUser):
     OTP=models.IntegerField(default=None,null=True)
     otp_create=models.DateTimeField(null=True)
     username=models.CharField(max_length=50,null=True,blank=True,unique=False)
-    email = models.EmailField(unique=True) 
+    email = models.EmailField(unique=True)
     profile_image=models.ImageField(upload_to=user_image,null=True)
 
     USERNAME_FIELD = "email"  # Use email as the login field
@@ -179,17 +180,7 @@ class PaymentLink(models.Model):
     status=models.CharField(choices=CHOICES, default='pending')
     approved_by = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, related_name="payment_approved_by")
     approved_date = models.DateTimeField(blank=True, null=True)
-
-
-
-
-
-
-
-
-
-
-
+    
 
 class PaymentProductQue(models.Model):
     product=models.ForeignKey(PaymentLink,on_delete=models.CASCADE)
@@ -366,3 +357,55 @@ class LockMessaging(models.Model):
     update=models.DateTimeField(auto_now=True)
     approved_by = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, related_name="lock_approved_by")
     approved_date = models.DateTimeField(blank=True, null=True)
+
+
+class EmailMarketing(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    email_csv_file=models.FileField(upload_to=email_market)
+    desc= models.TextField(null=True)
+    send_file=models.FileField(upload_to=email_send_file)
+    create_at=models.DateTimeField(auto_now_add=True)
+
+
+
+class WhatappMarketing(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    contact_csv_file=models.FileField(upload_to=whatapp_market)
+    desc= models.TextField(null=True)
+    send_file=models.FileField(upload_to=whatapp_send_file)
+    create_at=models.DateTimeField(auto_now_add=True)
+
+
+class PunchInUser(models.Model):
+    COMMISSION_CHOICES  = (
+        ('other_payment_mode', 'OTHER PAYMENT MODE'),
+        ('upi', 'UPI'),
+    )
+    FEATURE_CHOICES = (
+        ("payment_link", "PAYMENT_LINK"),
+        ("telegram", "TELEGRAM"),
+        ("lock_message", "LOCK_MESSAGE")
+    )
+    ACQUISITION_CHOICES = (
+        ('self', "SELF"),
+        ('organic', 'ORGANIC')
+    )
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="punch_user")
+    creator_name = models.CharField(max_length=20)
+    creator_id = models.CharField(max_length=20)
+    commission_options = models.CharField(choices=COMMISSION_CHOICES, default="upi")
+    commission_percent = models.CharField(max_length=20)
+    minimum_ticket = models.FloatField()
+    maximum_ticket = models.FloatField()
+    feature_type = MultiSelectField(choices=FEATURE_CHOICES)
+    social_link = models.TextField()
+    acquisition_funnel = models.CharField(choices=ACQUISITION_CHOICES, default="self")
+    onboarding_reason = models.TextField()
+    whatsapp_group = models.CharField(max_length=100)
+    document_name = models.CharField(max_length=20)
+    document = models.FileField(upload_to="punch_in_documents")
+    notes = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="punch_created_by")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    

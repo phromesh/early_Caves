@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth import logout
-from account.models import User, PaymentLink, LockMessaging
+from account.models import User, PaymentLink, LockMessaging, WhatappMarketing, EmailMarketing, \
+    PunchInUser, TelegramChannelProduct
 from django.core.paginator import Paginator
 from django.db.models import Q, Min
 
@@ -179,3 +180,80 @@ class ReviewProductView(View):
             "page_obj": page_obj,
         }
         return render(request, "review_product.html", context)
+    
+class OrganicSignUpView(View):
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all()
+        paginator = Paginator(users, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            "user": users,
+            "page_obj": page_obj,
+        }
+        return render(request, "organic_signUp")
+    
+
+class WhatsAppMarketingView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = WhatappMarketing.objects.all()
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'whatsapp_marketing':queryset,
+            "page_obj": page_obj,
+        }
+        return render(request, "whatsapp_marketing.html", context)
+    
+
+class EmailMarketingView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = EmailMarketing.objects.all()
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'email_marketing':queryset,
+            "page_obj": page_obj,
+        }
+        return render(request, "email_marketing.html", context)
+    
+    
+class TelegramProductView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = TelegramChannelProduct.objects.all()
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'telegram_product': queryset,
+            "page_obj": page_obj,
+        }
+        return render(request, 'telegram_product.html', context)
+    
+
+class PaymentProductView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = PaymentLink.objects.all()
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'payments': queryset,
+            "page_obj": page_obj,
+        }
+        return render(request, 'payment_prod.html', context)
+    
+
+class LockMessageProdView(View):
+    def get(self, request, *args, **kwargs):
+        queryset = LockMessaging.objects.all()
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'payments': queryset,
+            "page_obj": page_obj,
+        }
+        return render(request, 'lock_messages.html', context)

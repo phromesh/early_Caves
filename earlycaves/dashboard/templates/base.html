@@ -115,8 +115,19 @@
             <div class="collapse ps-4" id="usersSubmenu" data-bs-parent="#sidebarAccordion">
                 <a href="{% url 'punch_in' %}" class="nav-link text-white small {% if request.path == '/punch-in/' %}active{% endif %}">Punch In</a>
                 <a href="{% url 'onboarding_list' %}" class="nav-link text-white small">View Onboardings</a>
+                <a href="{% url 'onboarding_list' %}" class="nav-link text-white small">Organic Signup</a>
                 <a href="#" class="nav-link text-white small">My Onboarding Summary</a>
-                <a href="#" class="nav-link text-white small">Telegram User Existence</a>
+                <a class="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#productsSubmenu" role="button" aria-expanded="false" aria-controls="productsSubmenu">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-box-seam me-2"></i> Products
+                    </div>
+                    <i class="bi bi-chevron-down toggle-icon"></i>
+                </a>
+                <div class="collapse ps-4" id="productsSubmenu" data-bs-parent="#sidebarAccordion">
+                    <a href="{% url 'telegram_chaannels' %}" class="nav-link text-white small">Telegram</a>
+                    <a href="{% url 'payment_links' %}" class="nav-link text-white small">Payment Link</a>
+                    <a href="{% url 'lock_messages' %}" class="nav-link text-white small">Lock Messages</a>
+                    </div>
                 <a href="#" class="nav-link text-white small">Platform Fee Change</a>
             </div>
             
@@ -191,7 +202,17 @@
                 <a href="#" class="nav-link text-white small">Weekly Overview</a>
                 <a href="#" class="nav-link text-white small">Monthly KPIs</a>
             </div>
-    
+            <!-- Marketing with Submenu -->
+            <a class="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#reportsSubmenu" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-bar-chart-line me-2"></i> Marketing Tool
+                </div>
+                <i class="bi bi-chevron-down toggle-icon"></i>
+            </a>
+            <div class="collapse ps-4" id="reportsSubmenu" data-bs-parent="#sidebarAccordion">
+                <a href="{% url 'whatsapp_marketing' %}" class="nav-link text-white small">WhatsApp Marketing</a>
+                <a href="{% url 'email_marketing' %}" class="nav-link text-white small">Email Marketing</a>
+            </div>
             <!-- Reports with Submenu -->
             <a class="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#reportsSubmenu" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
                 <div class="d-flex align-items-center">

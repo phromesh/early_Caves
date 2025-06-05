@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Onboarding List{% endblock %}
+{% block title %}WhatsApp marketing{% endblock %}
 {% load dashboard_tags %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Onboardings</h2>
+    <h2>Telegram</h2>
 
     <!-- Date Range Filter Dropdown -->
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -56,30 +56,25 @@
         <table class="table table-striped">
             <thead class="thead-light">
                 <tr>
-                    <th>Creator Name</th>
-                    {% comment %} <th>Category</th> {% endcomment %}
-                    {% comment %} <th>Team</th> {% endcomment %}
-                    <th>Commission Charge</th>
-                    <th>Phone Number</th>
+                    <th>Group Name</th>
+                
+                    <th>Title</th>
+                    <th>category</th>
                    
-                    <th>Feature Type</th>
-                    <th>Social Name</th>
-                    <th>Social Link</th>
+                    <th>price</th>
+                    <th>discount</th>
+                    <th>Product ID</th>
                     <th>Status</th>
                     <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody>
                 {% for client in clients %}
                 <tr>
                     <td>{{ client.first_name }} {{client.last_name}}</td>
-                    {% comment %} <td>{{ client|group_name }}</td> {% endcomment %}
-                    {% comment %} <td>{{ onboarding.team }}</td> {% endcomment %}
                     <td>{{ onboarding.commission_charge }}</td>
-                    <td>{% if client.phone_number %}{{ client.phone_number }}{% else %}N/A{% endif %}</td>
-                
-                    <td>{{ onboarding.feature_type }}</td>
-                    <td>{{ onboarding.social_name }}</td>
+
                     <td><a href="{{ onboarding.social_link }}" target="_blank">{{ onboarding.social_link }}</a></td>
                     <td>{% if client.is_aactive %}Approved{% else %}Pending{% endif %}</td>
                     <td>
@@ -90,7 +85,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="13" class="text-center">No Onboardings available.</td>
+                    <td colspan="13" class="text-center">No Telegram Channel available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
